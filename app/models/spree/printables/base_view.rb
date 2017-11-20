@@ -3,11 +3,10 @@ include Forwardable
 module Spree
   class Printables::BaseView
     extend Forwardable
-    extend Spree::DisplayMoney
 
     attr_reader :printable
 
-    money_methods :item_total, :total
+    delegate :display_item_total, :display_total, to: :printable
 
     def initialize(printable)
       @printable = printable

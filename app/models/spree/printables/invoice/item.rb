@@ -1,10 +1,7 @@
 module Spree
   class Printables::Invoice::Item
-    extend Spree::DisplayMoney
 
-    attr_accessor :sku, :name, :options_text, :price, :quantity, :total
-
-    money_methods :price, :total
+    attr_accessor :sku, :name, :options_text, :display_price, :quantity, :display_total
 
     def initialize(args = {})
       args.each do |key, value|

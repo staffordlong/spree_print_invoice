@@ -8,7 +8,8 @@ module Spree
                    :item_total,
                    :total,
                    :payments,
-                   :shipments
+                   :shipments,
+                   :currency
 
     def items
       printable.line_items.map do |item|
@@ -16,9 +17,9 @@ module Spree
           sku: item.variant.sku,
           name: item.variant.name,
           options_text: item.variant.options_text,
-          price: item.price,
+          display_price: item.display_price,
           quantity: item.quantity,
-          total: item.total
+          display_total: item.display_total
         )
       end
     end

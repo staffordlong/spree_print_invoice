@@ -3,11 +3,9 @@ include Forwardable
 module Spree
   class Printables::Invoice::BaseView < Printables::BaseView
     extend Forwardable
-    extend Spree::DisplayMoney
 
     attr_reader :printable
-
-    money_methods :item_total, :total
+    delegate :display_item_total, :display_total, to: :printable
 
     def bill_address
       raise NotImplementedError, 'Please implement bill_address'
@@ -34,7 +32,7 @@ module Spree
       all_adjustments.group_by(&:label).each do |label, adjustment_group|
         adjustments << Spree::Printables::Invoice::Adjustment.new(
           label: label,
-          amount: adjustment_group.map(&:amount).sum
+          display_amount: Spree::Money.new(adjustment_group.map(&:amount).sum, currency: currency)
         )
       end
       adjustments
