@@ -13,14 +13,26 @@ module Spree
 
     def items
       printable.line_items.map do |item|
-        Spree::Printables::Invoice::Item.new(
-          sku: item.variant.sku,
-          name: item.variant.name,
-          options_text: item.variant.options_text,
-          display_price: item.display_price,
-          quantity: item.quantity,
-          display_total: item.display_total
-        )
+        inventory_unit = item.inventory_units.reject{|u| u.state == 'returned'}.last
+        if inventory_unit
+          Spree::Printables::Invoice::Item.new(
+            sku: inventory_unit.variant.sku,
+            name: inventory_unit.variant.name,
+            options_text: inventory_unit.variant.options_text,
+            display_price: item.display_price,
+            quantity: item.quantity,
+            display_total: item.display_total
+          )
+        else
+         Spree::Printables::Invoice::Item.new(
+            sku: item.variant.sku,
+            name: item.variant.name,
+            options_text: item.variant.options_text,
+            display_price: item.display_price,
+            quantity: item.quantity,
+            display_total: item.display_total
+          )
+        end
       end
     end
 
